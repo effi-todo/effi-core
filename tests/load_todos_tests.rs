@@ -1,11 +1,11 @@
-use effi::TodoManager;
+use effi_core::TodoManager;
 
 #[test]
 fn empty_file_test() {
-    let json_str: &str = "[]";
+    let json_str: &str = "{\"name\": \"TodoManager\", \"todos\": {}}";
 
-    let mut todo_manager = TodoManager::new("TodoManager");
-    todo_manager.todos = TodoManager::load_to_vec(json_str).unwrap();
+    let todo_manager = TodoManager::load_to_manager(json_str).unwrap();
 
     assert_eq!(todo_manager.todos.len(), 0);
+    assert_eq!(todo_manager.name, "TodoManager".to_string());
 }

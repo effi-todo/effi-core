@@ -1,4 +1,4 @@
-use effi::generate_id;
+use effi_core::generate_id;
 
 #[test]
 fn generate_id_test() {

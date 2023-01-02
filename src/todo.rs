@@ -14,10 +14,12 @@ pub struct Todo {
 }
 
 impl Todo {
+    /// Create a new todo using the given title, description and parent
     pub fn new(
         title: impl Into<String>,
         desc: impl Into<String>,
-        parent: Option<impl Into<Id>>,
+        tags: Vec<String>,
+        parent: Option<Id>,
     ) -> Todo {
         Todo {
             id: generate_id(),
@@ -28,7 +30,7 @@ impl Todo {
             title: title.into(),
             desc: desc.into(),
             status: TodoStatus::Todo,
-            tags: vec![],
+            tags,
         }
     }
 }
