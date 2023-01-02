@@ -11,3 +11,7 @@ pub fn generate_id() -> Id {
 
     return id;
 }
+
+pub fn id_to_string(id: &Id) -> String {
+    return format!("{}{}{}{}", id[0], id[1], id[2], id[3]);
+}

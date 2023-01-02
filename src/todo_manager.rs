@@ -2,7 +2,7 @@ use std::{collections::HashMap, error};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{Id, Todo};
+use crate::{id_to_string, EffiCoreError, Id, Todo};
 
 #[derive(Serialize, Deserialize)]
 pub struct TodoManager {
@@ -21,8 +21,16 @@ impl TodoManager {
         }
     }
 
-    pub fn add(&self, todo: Todo) -> Result<(), Box<dyn error::Error>> {
-        todo!()
+    pub fn add(&mut self, todo: Todo) -> Result<(), Box<dyn error::Error>> {
+        if self.todos.contains_key(&todo.id) {
+            return Err(Box::new(EffiCoreError::IdAlreadyTaken(id_to_string(
+                &todo.id,
+            ))));
+        };
+
+        self.todos.insert(todo.id, todo);
+
+        Ok(())
     }
 
     pub fn filter(&self, query: Option<String>, tags: Vec<String>) -> Vec<Id> {
