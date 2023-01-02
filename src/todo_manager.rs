@@ -33,12 +33,20 @@ impl TodoManager {
         Ok(())
     }
 
-    pub fn filter(&self, query: Option<String>, tags: Vec<String>) -> Vec<Id> {
-        let mut filtered_todos: Vec<Id> = vec![];
+    pub fn remove(&mut self, query: Option<&str>, tags: Vec<&str>, ids: Vec<Id>) {
+        let ids_to_remove = self.filter(query, tags, ids);
+
+        for id in &ids_to_remove {
+            self.todos.remove(id);
+        }
+    }
+
+    pub fn filter(&self, query: Option<&str>, tags: Vec<&str>, ids: Vec<Id>) -> Vec<Id> {
+        let mut filtered_todos: Vec<Id> = ids;
 
         'todo_loop: for (id, todo) in &self.todos {
             for tag in &tags {
-                if todo.tags.contains(tag) {
+                if todo.tags.contains(&tag.to_string()) {
                     filtered_todos.push(*id);
                     continue 'todo_loop;
                 }

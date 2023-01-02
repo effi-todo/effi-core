@@ -2,7 +2,7 @@ mod error;
 pub use error::EffiCoreError;
 
 mod id;
-pub use id::{generate_id, id_to_string, Id};
+pub use id::{generate_id, id_to_string, string_to_id, Id};
 
 mod status;
 pub use status::TodoStatus;

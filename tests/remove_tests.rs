@@ -1,7 +1,7 @@
 use effi_core::{string_to_id, Todo, TodoManager};
 
 #[test]
-fn filter_tags_test() {
+fn remove_tags_test() {
     let mut todo_manager = TodoManager::new("Todo Manager");
 
     let mut todo_one = Todo::new("Todo One", "Todo One Desc", vec!["one", "todo"], None);
@@ -13,19 +13,9 @@ fn filter_tags_test() {
     todo_manager.add(todo_one).unwrap();
     todo_manager.add(todo_two).unwrap();
 
-    assert_eq!(
-        todo_manager.filter(None, vec!["one"], vec![])[0],
-        string_to_id("aaaa").unwrap(),
-    );
+    todo_manager.remove(None, vec!["one"], vec![]);
 
-    assert_eq!(
-        todo_manager.filter(None, vec!["two"], vec![])[0],
-        string_to_id("aaab").unwrap(),
-    );
-
-    assert_eq!(todo_manager.filter(None, vec!["todo"], vec![]).len(), 2);
-
-    assert_eq!(todo_manager.filter(None, vec![], vec![]).len(), 0);
+    assert_eq!(todo_manager.todos.len(), 1);
 }
 
 #[test]
@@ -41,17 +31,7 @@ fn filter_query_test() {
     todo_manager.add(todo_one).unwrap();
     todo_manager.add(todo_two).unwrap();
 
-    assert_eq!(todo_manager.filter(Some("Todo"), vec![], vec![]).len(), 2);
+    todo_manager.remove(Some("Todo"), vec![], vec![]);
 
-    assert_eq!(
-        todo_manager.filter(Some("One"), vec![], vec![])[0],
-        string_to_id("aaaa").unwrap(),
-    );
-
-    assert_eq!(
-        todo_manager.filter(Some("Two"), vec![], vec![])[0],
-        string_to_id("aaab").unwrap(),
-    );
-
-    assert_eq!(todo_manager.filter(Some("Three"), vec![], vec![]).len(), 0);
+    assert_eq!(todo_manager.todos.len(), 0);
 }

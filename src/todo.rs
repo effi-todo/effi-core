@@ -18,9 +18,14 @@ impl Todo {
     pub fn new(
         title: impl Into<String>,
         desc: impl Into<String>,
-        tags: Vec<String>,
+        tags: Vec<&str>,
         parent: Option<Id>,
     ) -> Todo {
+        let mut tags_string: Vec<String> = vec![];
+        for tag in tags {
+            tags_string.push(tag.to_string());
+        }
+
         Todo {
             id: generate_id(),
             parent: match parent {
@@ -30,7 +35,7 @@ impl Todo {
             title: title.into(),
             desc: desc.into(),
             status: TodoStatus::Todo,
-            tags,
+            tags: tags_string,
         }
     }
 }
