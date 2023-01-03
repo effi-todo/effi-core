@@ -22,13 +22,13 @@ impl TodoManager {
     }
 
     pub fn add(&mut self, todo: Todo) -> Result<(), Box<dyn error::Error>> {
-        if self.todos.contains_key(&todo.id) {
+        if self.todos.contains_key(&todo.get_id()) {
             return Err(Box::new(EffiCoreError::IdAlreadyTaken(id_to_string(
-                &todo.id,
+                &todo.get_id(),
             ))));
         };
 
-        self.todos.insert(todo.id, todo);
+        self.todos.insert(todo.get_id(), todo);
 
         Ok(())
     }
@@ -46,7 +46,7 @@ impl TodoManager {
 
         'todo_loop: for (id, todo) in &self.todos {
             for tag in &tags {
-                if todo.tags.contains(&tag.to_string()) {
+                if todo.get_tags().contains(&tag.to_string()) {
                     filtered_todos.push(*id);
                     continue 'todo_loop;
                 }
@@ -54,7 +54,7 @@ impl TodoManager {
 
             match query {
                 Some(ref query) => {
-                    if todo.title.contains(query) || todo.desc.contains(query) {
+                    if todo.get_title().contains(query) || todo.get_desc().contains(query) {
                         filtered_todos.push(*id);
                         continue;
                     }
