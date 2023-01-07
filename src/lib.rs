@@ -1,3 +1,6 @@
+mod bond;
+pub use bond::Bond;
+
 mod error;
 pub use error::EffiCoreError;
 

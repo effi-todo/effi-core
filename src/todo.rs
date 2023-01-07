@@ -7,6 +7,7 @@ use crate::{generate_id, Id, TodoStatus};
 pub struct Todo {
     id: Id,
     parent: Option<Id>,
+    children: Vec<Id>,
     title: String,
     desc: String,
     status: TodoStatus,
@@ -32,6 +33,7 @@ impl Todo {
                 Some(parent) => Some(parent.into()),
                 None => None,
             },
+            children: vec![],
             title: title.into(),
             desc: desc.into(),
             status: TodoStatus::Todo,
@@ -86,5 +88,17 @@ impl Todo {
 
     pub fn set_parent(&mut self, parent: Option<Id>) {
         self.parent = parent;
+    }
+
+    pub fn get_children(&self) -> &Vec<Id> {
+        return &self.children;
+    }
+
+    pub fn add_child(&mut self, child: Id) {
+        self.children.push(child);
+    }
+
+    pub fn remove_child(&mut self, child: Id) {
+        self.children.retain(|t| *t != child);
     }
 }

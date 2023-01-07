@@ -5,6 +5,9 @@ pub enum EffiCoreError {
     #[error("id '{0}' is already taken")]
     IdAlreadyTaken(String),
 
-    #[error("could not convert '{0}' to an id: {1}")]
+    #[error("could not convert '{0}' to an id: '{1}'")]
     InvalidStringForId(String, String),
+
+    #[error("could not find the todo with id '{0}'")]
+    TodoNotFound(String),
 }

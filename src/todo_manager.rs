@@ -2,7 +2,7 @@ use std::{collections::HashMap, error};
 
 use serde::{Deserialize, Serialize};
 
-use crate::{id_to_string, EffiCoreError, Id, Todo};
+use crate::{id_to_string, Bond, EffiCoreError, Id, Todo};
 
 #[derive(Serialize, Deserialize)]
 pub struct TodoManager {
@@ -39,6 +39,31 @@ impl TodoManager {
         for id in &ids_to_remove {
             self.todos.remove(id);
         }
+    }
+
+    pub fn add_relation(&mut self, bond: Bond) -> Result<(), Box<dyn error::Error>> {
+        // TODO: checks to make sure that the bond is valid: not circular
+
+        match self.todos.get_mut(&bond.parent) {
+            Some(parent) => parent.add_child(bond.child),
+            None => {
+                return Err(Box::new(EffiCoreError::TodoNotFound(id_to_string(
+                    &bond.parent,
+                ))))
+            }
+        };
+
+        // TODO: Remove bond from previous parent
+        match self.todos.get_mut(&bond.child) {
+            Some(child) => child.set_parent(Some(bond.parent)),
+            None => {
+                return Err(Box::new(EffiCoreError::TodoNotFound(id_to_string(
+                    &bond.child,
+                ))))
+            }
+        }
+
+        Ok(())
     }
 
     pub fn filter(&self, query: Option<&str>, tags: Vec<&str>, ids: Vec<Id>) -> Vec<Id> {
